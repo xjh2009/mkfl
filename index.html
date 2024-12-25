@@ -42,7 +42,7 @@
             const sid = document.getElementById('sid').value;
             const authorization = document.getElementById('authorization').value;
             const filePath = document.getElementById('filePath').value;
-            const apiUrl = `http://minekuai.lantian.bf/api/client/servers/${sid}/files/download?file=${filePath}`;
+            const apiUrl = `https://minekuai.lantian.bf/api/client/servers/${sid}/files/download?file=${filePath}`;
             localStorage.setItem('sidRaw', sid);
             localStorage.setItem('apiAuthorization', authorization);
             try {
