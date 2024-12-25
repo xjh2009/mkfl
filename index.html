@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>麦块联机服务器文件直链获取</title>
+    <link href="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">获取麦块联机服务器文件直链</h1>
+        <h2 class="mb-4">因为源API有跨域限制使用杏花CDN进行中转</h2>
+        <form id="apiForm">
+            <div class="mb-3">
+                <label for="url" class="form-label">实例ID</label>
+                <input type="text" class="form-control" id="sid" placeholder="6972c429" required>
+            </div>
+            <div class="mb-3">
+                <label for="authorization" class="form-label">API密钥</label>
+                <input type="text" class="form-control" id="authorization" placeholder="ptlc_dhjSiFP9BJOA996cbAC38nXIjxO8ftuSuYiWEyw2077" required>
+            </div>
+            <div class="mb-3">
+                <label for="filePath" class="form-label">文件路径</label>
+                <input type="text" class="form-control" id="filePath" placeholder="/eula.txt" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="sendRequest()">发送请求</button>
+        </form>
+        <div class="mt-4">
+            <h3>响应结果</h3>
+            <pre id="responseOutput" class="bg-light p-3"></pre>
+        </div>
+    </div>
+
+    <script>
+          window.onload = function () {
+                document.getElementById('sid').value = localStorage.getItem('sidRaw') || '';
+                document.getElementById('authorization').value = localStorage.getItem('apiAuthorization') || '';
+            };
+        async function sendRequest() {
+            const sid = document.getElementById('sid').value;
+            const authorization = document.getElementById('authorization').value;
+            const filePath = document.getElementById('filePath').value;
+            const apiUrl = `http://minekuai.lantian.bf/api/client/servers/${sid}/files/download?file=${filePath}`;
+            localStorage.setItem('sidRaw', sid);
+            localStorage.setItem('apiAuthorization', authorization);
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+authorization
+                    }
+                });
+
+                const data = await response.json();
+                document.getElementById('responseOutput').textContent = data.attributes?.url || '未找到有效的 URL';
+            } catch (error) {
+                document.getElementById('responseOutput').textContent = `失败: ${error}`;
+            }
+        }
+    </script>
+</body>
+
+</html>
